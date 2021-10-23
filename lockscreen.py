@@ -18,7 +18,7 @@ very_small = ('Comic Sans MS', 15)
 
 
 # ---------------VARIABLES----------#
-fcompany_name = 'Company Name in lockscreen.py file'
+fcompany_name = 'My Company name in Lockscreen.py'
 background = '#94ffd6'
 date_bg = '#fff78a'
 login_bg= '#70d7ff'

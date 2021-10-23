@@ -109,7 +109,8 @@ def evaluate_this(name):
         d_sum += i[0]
     for j in all_credit:
         c_sum += j[0]
-    return d_sum-c_sum
+    ans= d_sum-c_sum
+    return round(ans, 2)
 
 
 def get_all_names():
@@ -136,7 +137,7 @@ def debit_credit():
         sold += d[0]
     for cr in credit:
         bought += cr[0]
-    return [sold, bought]
+    return [round(sold,2), round(bought,2)]
 
 
 def all_customers_dealers_with_address(sm):
@@ -176,7 +177,7 @@ def evaluate(this,loc, that):
             addr=c.execute('SELECT address FROM dealers WHERE name=:this',{'this':this}).fetchone()
         return addr[0], 'NA','NA'
     else:
-        return address, debit, credit
+        return address, round(debit,2), round(credit)
 
 
 def receivables_payables(who):
@@ -190,9 +191,9 @@ def receivables_payables(who):
     credits = sum(credits)
 
     if who == 'Dealer':
-        return credits-debits
+        return round(credits-debits)
     elif who == 'Customer':
-        return debits-credits
+        return round(debits-credits,2)
 
 def details(name,address, type):
     if type =='Customer':

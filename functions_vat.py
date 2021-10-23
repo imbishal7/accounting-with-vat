@@ -25,7 +25,7 @@ def get_rate(product):
     """Returns the vat purchase rate from stocks"""
     try:
         c.execute('select rate from stocks where product=:product',{'product':product})
-        return c.fetchone()[0]
+        return round(c.fetchone()[0],2)
     except:
         return 0
 
@@ -33,7 +33,7 @@ def get_actual_rate(product):
     """Returns the actual purchase rate from stocks"""
     try:
         c.execute('select actual_rate from stocks where product=:product',{'product':product})
-        return c.fetchone()[0]
+        return round(c.fetchone()[0],2)
     except:
         return 0
 
@@ -50,6 +50,11 @@ def all_stocks_detail():
     """Shows all info about the stocked items."""
     all = c.execute('select * from stocks order by product').fetchall()
     return all
+
+def stock_value():
+    info = c.execute('select * from stocks').fetchall()
+    amts = [float(i[2])*float(i[1]) for i in info]
+    return round(sum(amts),2)
 
 def all_sales():
     """shows all the details stored in sales database"""
@@ -80,11 +85,11 @@ def total_amount(ref, name, type):
     if type =='Dealer':
         details = c.execute('select rate, quantity from VATpurchases where reference=:ref and dealer=:name',{'ref':ref,'name':name}).fetchall()
         amt = [float(i[0])*float(i[1]) for i in details]
-        return float(sum(amt))
+        return round(sum(amt),2)
     else:
         details = c.execute('select rate, quantity from VATsales where reference=:ref and customer=:name',{'ref':ref,'name':name}).fetchall()
         amt = [float(i[0])*float(i[1]) for i in details]
-        return float(sum(amt))
+        return round(sum(amt),2)
 
 class Stocks():
     def __init__(self, product,  quantity, rate,actual_rate):
@@ -126,12 +131,12 @@ class Stocks():
 def amount_purchased():
     all = c.execute('select quantity, rate from VATpurchases').fetchall()
     multiplied = [i[0]* i[1] for i in all]
-    return sum(multiplied)
+    return round(sum(multiplied),2)
 
 def amount_sold():
     all = c.execute('select quantity, rate from VATsales').fetchall()
     multiplied = [i[0]* i[1] for i in all]
-    return sum(multiplied)
+    return round(sum(multiplied),2)
 
 class StocksPurchases():
     def __init__(self,reference,date:str,dealer,product, quantity, rate, actual_rate):
@@ -225,7 +230,7 @@ class Invoice():
         self.name = name
         self.remarks = remarks 
         self.amount = amount
-        self.vat = 0.13*float(self.amount)
+        self.vat = round(0.13*float(self.amount),2)
         self.ttype = ttype
 
     c.execute("""
@@ -303,11 +308,12 @@ def predict_remarks(products):
     words = []
     for i in products:
         words.extend(i.split(' '))
-    dicts={'Furnitures':['CHAIR','DINING','SHOWCASE','BED','SOFA','LOW-BED','DARAJ','PALANG','DRESSING','TABLE'],
-            'Electronics':['FRIDGE','VACUUM','OVEN','MIXER','GRINDER','COOKER','FRYER','ELECTRIC','JUG','JAR'],
+    dicts={'Furnitures':['CHAIR','DINING','SHOWCASE','BED','SOFA','LOW-BED','DARAJ','PALANG','DRESSING','TABLE','CORNER','SOFA'],
+            'Electronics':['FRIDGE','VACUUM','OVEN','MIXER','GRINDER','COOKER','FRYER','ELECTRIC','JUG','JAR','BALTRA','LED','BULB','HEATER',
+                            'FOSTER','INDUCTION'],
             'Hardware':['ROD', 'SS','PIPE','PLY'],
             'Furnishing Items':['PARDA','BEDSHEET','B/S','JHUL','HANGER','SHELF','CURTAIN','PILLOW','COVER','MOP', 'MAT','CARPET'],
-            'Plastic Items':['CHAIR','TABLE','TBL/S','TBL/R','LM','BAGMATI','CH','PLASTIC']
+            'Plastic Items':['CHAIR','TABLE','TBL/S','TBL/R','LM','BAGMATI','CH','PLASTIC','MAT','BABY']
             }
     predictions = []
     for j in range(len(words)):
@@ -339,9 +345,7 @@ def predict_remarks(products):
         if curr>counter:
             counter = curr
             predicted = item
-    if counter+3>unknown:
+    if counter+100>unknown:
         return predicted
     else:
         return 'Unknown Item'
-
-#print(details_on_invoice('01', '2078-06-19', 'RAHUL MASKEY', 'Customer'))

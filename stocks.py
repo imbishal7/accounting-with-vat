@@ -44,12 +44,18 @@ class StocksPage(Frame):
         sta = Button(func_frame, relief=GROOVE, bd=4, text='Statements', bg='silver',fg='black', font=tiny_font,height=1, width=10, command=lambda: controller.show_frame('StatementsPage'))
         sta.grid(row=2, column=3, sticky='W', padx=5)
 
+        stock_amount = Label(func_frame, font=medium_font, bg='sky blue', fg='green', padx=25, pady=10,
+                            relief=RIDGE, bd=5, width=12)
+        stock_amount.grid(row=1, column=4, sticky=E, padx=5, columnspan=4)
+
+        Label(func_frame, text='Stock Amt:',fg='dark blue', font=small_font, bg=bg).grid(row=1, column=3, sticky=E, padx=5)
+
 
         add_button = Button(func_frame, text='± Change Stocks', font=tiny_font, bg='#2930ff', fg='white', bd=4, relief=GROOVE, width=14, command=lambda: get_entry())
-        add_button.grid(row=2,column=6, pady=10, padx=10)
+        add_button.grid(row=2,column=6, pady=10, padx=10, sticky=E)
 
         lock_button = Button(func_frame, text='Lock', font=tiny_font, bg='light green', fg='black', bd=4, relief=GROOVE, width=4, command=lambda :controller.show_frame('LockScreen'))
-        lock_button.grid(row=2, column=5, pady=10, sticky=W, padx=10)
+        lock_button.grid(row=2, column=3, sticky=E)
 
         refresh_button = Button(func_frame, text='Refresh', font=tiny_font, bg='sky blue', bd=4, relief=GROOVE, command=lambda:refresh_and_add())
         refresh_button.grid(row=2,column=4, pady=10, sticky=E, padx=10)
@@ -77,7 +83,7 @@ class StocksPage(Frame):
                 refresh_and_add()
             
         delete_stock_button =  Button(func_frame, text='Delete', font=tiny_font, bg='orange', bd=4, relief=GROOVE, command=lambda:get_delete_stocks())
-        delete_stock_button.grid(row=2, column=3, sticky=E)
+        delete_stock_button.grid(row=2, column=5, pady=10, sticky=W, padx=10)
 
 # ------------Add Button-----------#
         def get_entry():
@@ -161,4 +167,6 @@ class StocksPage(Frame):
             for i in range(len(transactions)):
                 statements = transactions[i]
                 stats.insert('', index=i, values=statements)
+            stock = stock_value()
+            stock_amount.config(text='Rs.' + str(stock))
         refresh_and_add()
