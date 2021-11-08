@@ -1,7 +1,7 @@
 # accounting-with-vat
 An accounting app for businesses registered in VAT. This app is suitable for most of medium-scaled business firm for maintaining tax invoices during a financial year as well as records the receivables from customers and payables for dealers.
 
-# At first, set the company name in lockscreen.py file
+### At first, set the company name in lockscreen.py file
 # Then set the username and password in credentials.py file.
 # Set the increased VAT amount and Marked price percent in the corresponding variables in functions_vat.py file.
 # Run main_app.py
